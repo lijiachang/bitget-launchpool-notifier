@@ -9,7 +9,7 @@ This project monitors the Bitget Launchpool for new products and sends email not
 
 1. Clone the repository:
 ```
-git clone https://github.com/yourusername/bitget-launchpool-notifier.git  
+git clone https://github.com/lijiachang/bitget-launchpool-notifier.git
 cd bitget-launchpool-notifier
 ```
 
