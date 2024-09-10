@@ -87,12 +87,12 @@ except FileNotFoundError:
 with open('last_product.pickle', 'wb') as f:
     pickle.dump(productName, f)
 
-if last_product_name and productName != last_product_name:
+if productName != last_product_name:
     email_config = load_config()
     logging.info('send_email to {}'.format(email_config['to']))
 
     send_email(
-        'New product available',
-        f'New product: {productName}, {startTime} -> {endTime}',
+        'Bitget LaunchPool New product available',
+        f'New product: {productName}, {from_timestamp(startTime)} -> {from_timestamp(endTime)}',
         email_config
     )
