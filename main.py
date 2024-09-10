@@ -47,7 +47,7 @@ headers = {
     'locale': 'zh_CN',
     'origin': 'https://www.bitget.com',
     'referer': 'https://www.bitget.com/zh-CN/earn/launchpool',
-    'sec-ch-ua': '"Chromium";v="116", "Not)A;Brand";v="24", "Google Chrome";v="116"',
+    'sec-ch-ua': '"Chromium";v="128", "Not;A=Brand";v="24", "Google Chrome";v="128"',
     'sec-ch-ua-mobile': '?0',
     'sec-ch-ua-platform': '"macOS"',
     'sec-fetch-dest': 'empty',
@@ -55,7 +55,7 @@ headers = {
     'sec-fetch-site': 'same-origin',
     'securitynew': 'true',
     'terminaltype': '1',
-    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
+    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
 }
 
 data = {
@@ -67,8 +67,13 @@ data = {
 
 response = requests.post(url, headers=headers, data=json.dumps(data))
 # logging.info('launchpool Response: %s', response.text)
+try:
+    items = response.json()['data']['items']
+except Exception as e:
+    logging.info('launchpool Response: %s', response.text)
+    logging.error('Error: %s', e)
+    exit(1)
 
-items = response.json()['data']['items']
 last_product = items[0]
 productName = last_product['productName']
 startTime = last_product['startTime']
