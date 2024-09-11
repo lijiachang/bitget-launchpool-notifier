@@ -34,7 +34,7 @@ def load_config():
     config.read('config.ini')
     return config['Email']
 
-url = 'https://www.bitget.com/v1/finance/launchpool/product/list'
+url = 'https://appapi.beeeye.xyz/v1/finance/launchpool/product/list'
 
 headers = {
     'authority': 'www.bitget.com',
@@ -58,12 +58,7 @@ headers = {
     'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
 }
 
-data = {
-    'pageNo': 1,
-    'match': False,
-    'locale': 'zh-CN',
-    'languageType': 1
-}
+data = {"pageNo":1,"matchType":0}
 
 response = requests.post(url, headers=headers, data=json.dumps(data))
 # logging.info('launchpool Response: %s', response.text)
