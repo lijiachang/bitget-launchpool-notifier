@@ -41,9 +41,7 @@ For continuous monitoring, set up a cron job to run the script at regular interv
 
 Add the following line (adjust the paths as necessary):
 
-
-    */10 * * * * /usr/bin/python3 /path/to/bitget-launchpool-notifier/main.py >> /path/to/bitget-launchpool-notifier/cron.log 2>&1
-
+    */10 * * * * cd /path/to/bitget-launchpool-notifier/ && /usr/bin/python3 main.py >> cron.log 2>&1
 This will run the script every 10 minutes and append both standard output and errors to cron.log.
 
 Save and exit the crontab editor.
