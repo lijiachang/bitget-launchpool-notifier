@@ -95,6 +95,7 @@ if productName != last_product_name:
         )
     except Exception as e:
         logging.error('Error send_email: %s', e)
+        exit(1)
 
 # Save current product name
 with open('last_product.pickle', 'wb') as f:
