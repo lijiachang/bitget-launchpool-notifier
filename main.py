@@ -1,11 +1,13 @@
-import requests
+import configparser
 import json
 import logging
-from datetime import datetime
 import pickle
 import smtplib
+import ssl
+from datetime import datetime
 from email.mime.text import MIMEText
-import configparser
+
+import requests
 
 logging.basicConfig(filename='launchpool.log',
                     filemode='a',
@@ -29,10 +31,14 @@ def send_email(subject, body, config, timeout=30):
     端口 587：这是 SMTP 的另一个常用端口，专门用于客户端到邮件服务器的传输。它支持 STARTTLS，允许客户端与服务器之间进行加密连接。它是推荐的端口，用于发送邮件。
     端口 465：这是一个较老的 SMTP 端口，通常与 SMTPS（SMTP Secure）相关联，这是一种通过 SSL/TLS 加密的 SMTP 发送方式。虽然这个端口并不如 587 被广泛使用，但在某些配置中仍然可能被采用。
     """
+    # note: 解决在服务器上不能使用25端口的问题？
+    port = 465  # SSL 端口
+    context = ssl.create_default_context()
 
     try:
-        with smtplib.SMTP(config['smtp_server'], port=465, timeout=timeout) as s:
-            s.starttls()  # Start TLS for security
+        # with smtplib.SMTP(config['smtp_server'], port=465, timeout=timeout) as s:
+        with smtplib.SMTP_SSL(config['smtp_server'], port, context=context, timeout=timeout) as s:
+            # s.starttls()  # Start TLS for security
             s.login(config['from_email'], config['smtp_password'])
             s.sendmail(config['from_email'], [config['to']], msg.as_string())
         logging.info(f"Email sent successfully to {config['to']}")
