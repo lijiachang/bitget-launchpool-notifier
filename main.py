@@ -100,7 +100,7 @@ if productName != last_product_name:
             'Bitget LaunchPool New product available',
             f'New product: {productName}, {from_timestamp(startTime)} -> {from_timestamp(endTime)}',
             email_config,
-            timeout=60
+            timeout=30
         )
     except Exception as e:
         logging.error('Error send_email: %s', e)
