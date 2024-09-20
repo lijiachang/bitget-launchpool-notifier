@@ -23,9 +23,15 @@ def send_email(subject, body, config, timeout=30):
     msg['Subject'] = subject
     msg['From'] = config['from_email']
     msg['To'] = config['to']
+    """
+    SMTP（简单邮件传输协议）主要使用以下端口进行邮件发送：
+    端口 25：这是 SMTP 的标准端口。通常用于服务器之间的邮件传输。在许多网络环境中，这个端口可能会被 ISP 或防火墙阻止，用于防止垃圾邮件。
+    端口 587：这是 SMTP 的另一个常用端口，专门用于客户端到邮件服务器的传输。它支持 STARTTLS，允许客户端与服务器之间进行加密连接。它是推荐的端口，用于发送邮件。
+    端口 465：这是一个较老的 SMTP 端口，通常与 SMTPS（SMTP Secure）相关联，这是一种通过 SSL/TLS 加密的 SMTP 发送方式。虽然这个端口并不如 587 被广泛使用，但在某些配置中仍然可能被采用。
+    """
 
     try:
-        with smtplib.SMTP(config['smtp_server'], timeout=timeout) as s:
+        with smtplib.SMTP(config['smtp_server'], port=465, timeout=timeout) as s:
             s.starttls()  # Start TLS for security
             s.login(config['from_email'], config['smtp_password'])
             s.sendmail(config['from_email'], [config['to']], msg.as_string())
