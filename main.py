@@ -18,16 +18,24 @@ def from_timestamp(timestamp):
     dt_object = datetime.fromtimestamp(timestamp)
     return dt_object
 
-def send_email(subject, body, config):
+def send_email(subject, body, config, timeout=30):
     msg = MIMEText(body)
     msg['Subject'] = subject
     msg['From'] = config['from_email']
     msg['To'] = config['to']
 
-    s = smtplib.SMTP(config['smtp_server'])
-    s.login(config['from_email'], config['smtp_password'])
-    s.sendmail(config['from_email'], [config['to']], msg.as_string())
-    s.quit()
+    try:
+        with smtplib.SMTP(config['smtp_server'], timeout=timeout) as s:
+            s.starttls()  # Start TLS for security
+            s.login(config['from_email'], config['smtp_password'])
+            s.sendmail(config['from_email'], [config['to']], msg.as_string())
+        logging.info(f"Email sent successfully to {config['to']}")
+    except smtplib.SMTPException as e:
+        logging.error(f"SMTP error occurred: {e}")
+        raise
+    except Exception as e:
+        logging.error(f"An error occurred while sending email: {e}")
+        raise
 
 def load_config():
     config = configparser.ConfigParser()
@@ -91,7 +99,8 @@ if productName != last_product_name:
         send_email(
             'Bitget LaunchPool New product available',
             f'New product: {productName}, {from_timestamp(startTime)} -> {from_timestamp(endTime)}',
-            email_config
+            email_config,
+            timeout=60
         )
     except Exception as e:
         logging.error('Error send_email: %s', e)
