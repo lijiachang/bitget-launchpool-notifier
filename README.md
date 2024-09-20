@@ -3,7 +3,10 @@ Monitoring Bitget launchpool and sending notifications；
 监控Bitget的launchpool币种上新 并发送邮件通知
 
 
-This project monitors the Bitget Launchpool for new products and sends email notifications when a new product is detected.
+This project monitors the Bitget Launchpool for new products and sends email notifications when a new product is detected.  
+
+you will receive an email notification like this:  
+![img.png](img.png)
 
 ## Setup
 
