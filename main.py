@@ -6,7 +6,7 @@ import smtplib
 import ssl
 from datetime import datetime
 from email.mime.text import MIMEText
-from pprint import pprint
+from pprint import pformat
 
 import requests
 
@@ -112,7 +112,7 @@ if productName != last_product_name:
         send_email(
             f'New Bitget LaunchPool: {productName}',
             f'New product: {productName}, {from_timestamp(startTime)} -> {from_timestamp(endTime)} \n\n'
-            f'product raw data: {pprint(last_product)}',
+            f'product raw data: {pformat(last_product, indent=2, width=100)}',
             email_config,
             timeout=30
         )
