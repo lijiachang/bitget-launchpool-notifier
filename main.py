@@ -16,10 +16,12 @@ logging.basicConfig(filename='launchpool.log',
                     level=logging.INFO
                     )
 
+
 def from_timestamp(timestamp):
     timestamp = int(timestamp) // 1000
     dt_object = datetime.fromtimestamp(timestamp)
     return dt_object
+
 
 def send_email(subject, body, config, timeout=30):
     msg = MIMEText(body)
@@ -50,12 +52,15 @@ def send_email(subject, body, config, timeout=30):
         logging.error(f"An error occurred while sending email: {e}")
         raise
 
+
 def load_config():
     config = configparser.ConfigParser()
     config.read('config.ini')
     return config['Email']
 
-url = 'https://appapi.beeeye.xyz/v1/finance/launchpool/product/list'
+
+# url = 'https://appapi.beeeye.xyz/v1/finance/launchpool/product/list'
+url = 'https://www.bitget.com/v1/act/launchPool/product/list/new'
 
 headers = {
     'authority': 'www.bitget.com',
@@ -67,7 +72,7 @@ headers = {
     'language': 'zh_CN',
     'locale': 'zh_CN',
     'origin': 'https://www.bitget.com',
-    'referer': 'https://www.bitget.com/zh-CN/earn/launchpool',
+    'referer': 'https://www.bitget.com/zh-CN/events/launchpool',
     'sec-ch-ua': '"Chromium";v="128", "Not;A=Brand";v="24", "Google Chrome";v="128"',
     'sec-ch-ua-mobile': '?0',
     'sec-ch-ua-platform': '"macOS"',
@@ -79,21 +84,20 @@ headers = {
     'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
 }
 
-data = {"pageNo":1,"matchType":0}
+data = {"pageNo": 1, "matchType": 0, "status": 1}
 
 response = requests.post(url, headers=headers, data=json.dumps(data))
-# logging.info('launchpool Response: %s', response.text)
+logging.info('launchpool Response: %s', response.text)
 try:
     items = response.json()['data']['items']
+    last_product = items[0]
+    productName = last_product['productName']
+    startTime = last_product['startTime']
+    endTime = last_product['endTime']
 except Exception as e:
     logging.info('launchpool Response: %s', response.text)
     logging.error('Error: %s', e)
     exit(1)
-
-last_product = items[0]
-productName = last_product['productName']
-startTime = last_product['startTime']
-endTime = last_product['endTime']
 
 logging.info('last productName:%s, %s -> %s', productName, from_timestamp(startTime), from_timestamp(endTime))
 
